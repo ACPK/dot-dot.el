@@ -32,6 +32,11 @@
 
 ;;; Code:
 
+(defgroup dot-dot nil
+  "dot-dot"
+  :prefix "dot-dot-"
+  :group 'applications)
+
 (defvar dot-dot:buffer "")
 
 (defun dot-dot:open ()
@@ -51,6 +56,7 @@
 
 ;;;###autoload
 (defun dot-dot:change-buffer ()
+  "Adapt new buffer to dot-dot window"
   (interactive)
   (setq dot-dot:buffer (completing-read
                         "Buffer: "
@@ -59,6 +65,7 @@
 
 ;;;###autoload
 (defun dot-dot:toggle ()
+  "Toggle dot-dot window"
   (interactive)
   (when (string-blank-p dot-dot:buffer)
     (dot-dot:change-buffer))
