@@ -25,10 +25,13 @@
 
 ;;; Commentary:
 
-;; Set your prefer key binding to dot-dot:toggle:
-;;   (global-set-key (kbd "C-. C-.") 'dot-dot:toggle)
+;; dot-dot.el will automatically set global key binding "C-. C-." when it doesn't mapped yet.
+;; Use that key binding to show/hide window.
 ;;
-;; Adapt other buffer: with M-x dot-dot:change-buffer
+;; You can also set your prefer key binding to dot-dot:toggle.
+;;   (global-set-key (kbd "C-. C-1") 'dot-dot:toggle)
+;;
+;; Adapt other buffer: M-x dot-dot:change-buffer
 
 ;;; Code:
 
@@ -37,10 +40,18 @@
   :prefix "dot-dot-"
   :group 'applications)
 
+(defcustom dot-dot:window-height-rate 20
+  "Specify dot-dot window's height"
+  :type 'integer
+  :group 'dot-dot)
+
 (defvar dot-dot:buffer "")
 
+(defconst dot-dot:key-seq (kbd "C-. C-."))
+
 (defun dot-dot:open ()
-  (split-window-below (/ (* 80 (window-height)) 100))
+  (split-window-below
+   (/ (* (- 100 (abs dot-dot:window-height-rate)) (window-height)) 100))
   (other-window 1)
   (switch-to-buffer (get-buffer dot-dot:buffer)))
 
@@ -72,6 +83,10 @@
   (if (dot-dot:get-window)
       (dot-dot:close)
     (dot-dot:open)))
+
+;;;###autoload
+(unless (lookup-key (current-global-map) dot-dot:key-seq)
+  (global-set-key dot-dot:key-seq 'dot-dot:toggle))
 
 (provide 'dot-dot)
 
